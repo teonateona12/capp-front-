@@ -8,6 +8,7 @@ const { Column } = Table;
 function App() {
   const { data, loadData, addData, updateData, deleteData } = useDataStore();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [error, setError] = useState<string>("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,53 +19,35 @@ function App() {
     },
     phone: "",
   });
-
-  const handleInputChange = (event: any) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-  const handleAddressChange = (field: any, value: any) => {
-    setFormData({
-      ...formData,
-      address: {
-        ...formData.address,
-        [field]: value,
-      },
-    });
-  };
-  const handleGenderChange = (value: any) => {
-    setFormData({
-      ...formData,
-      gender: value,
-    });
-  };
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
   const handleAddData = async () => {
     const newData = {
       ...formData,
       id: data.length + 1,
     };
-    await addData(newData);
-    setFormData({
-      name: "",
-      email: "",
-      gender: "",
-      address: {
-        street: "",
-        city: "",
-      },
-      phone: "",
-    });
-    setIsModalVisible(false);
+    if (
+      formData.address.city !== "" &&
+      formData.address.street !== "" &&
+      formData.email !== "" &&
+      formData.gender !== "" &&
+      formData.name !== "" &&
+      formData.phone !== ""
+    ) {
+      await addData(newData);
+      setFormData({
+        name: "",
+        email: "",
+        gender: "",
+        address: {
+          street: "",
+          city: "",
+        },
+        phone: "",
+      });
+      setIsModalVisible(false);
+      setError("");
+    } else {
+      setError("სავალდებულოა ყველა ველის შევსება");
+    }
   };
 
   useEffect(() => {
@@ -137,6 +120,7 @@ function App() {
             <Input
               name="name"
               value={formData.name}
+              required
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -149,6 +133,7 @@ function App() {
             <Input
               name="email"
               value={formData.email}
+              required
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -176,6 +161,7 @@ function App() {
             <Input
               name="street"
               value={formData.address.street}
+              required
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -191,6 +177,7 @@ function App() {
             <Input
               name="city"
               value={formData.address.city}
+              required
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -206,6 +193,7 @@ function App() {
             <Input
               name="email"
               value={formData.phone}
+              required
               onChange={(e) =>
                 setFormData({
                   ...formData,
@@ -214,6 +202,7 @@ function App() {
               }
             />
           </Form.Item>
+          <p style={{ color: "red" }}>{error}</p>
         </Form>
       </Modal>
     </>
