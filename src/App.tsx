@@ -38,6 +38,16 @@ function App() {
       console.log(error);
     }
   };
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3001/api/addata/${"id"}`
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return <></>;
 }
 
