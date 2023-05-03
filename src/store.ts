@@ -45,7 +45,7 @@ export const useDataStore = create<DataStore>((set) => ({
 
   updateData: async (id: number, user: User) => {
     try {
-      await axios.put(`http://localhost:3001/api/updatedata/${id}`, user);
+      await axios.put(`http://localhost:3001/api/addata/${id}`, user);
       set((state) => ({
         data: state.data.map((u) => (u.id === id ? user : u)),
       }));
@@ -56,7 +56,7 @@ export const useDataStore = create<DataStore>((set) => ({
 
   deleteData: async (id: number) => {
     try {
-      await axios.delete(`http://localhost:3001/api/deletedata/${id}`);
+      await axios.delete(`http://localhost:3001/api/addata/${id}`);
       set((state) => ({
         data: state.data.filter((u) => u.id !== id),
       }));

@@ -1,42 +1,8 @@
 import { useEffect } from "react";
 import "./App.css";
-import { useDataStore } from "./store";
-import { Table, Select } from "antd";
-
-const columns = [
-  {
-    title: "ID",
-    dataIndex: "id",
-    key: "id",
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
-  },
-  {
-    title: "Gender",
-    dataIndex: "gender",
-    key: "gender",
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-    key: "address",
-    render: (address: { street: string; city: string }) =>
-      `${address.street}, ${address.city}`,
-  },
-  {
-    title: "Phone",
-    dataIndex: "phone",
-    key: "phone",
-  },
-];
+import { useDataStore, User } from "./store";
+import { Table, Button, Space } from "antd";
+const { Column } = Table;
 
 function App() {
   const { data, loadData, addData, updateData, deleteData } = useDataStore();
@@ -44,7 +10,6 @@ function App() {
   useEffect(() => {
     loadData();
   }, []);
-  console.log(data);
 
   const handleAddData = async () => {
     const newData = {
@@ -74,7 +39,30 @@ function App() {
 
   return (
     <>
-      <Table dataSource={data} columns={columns} />
+      <Table dataSource={data} rowKey="id">
+        <Column title="Id" dataIndex="id" key="id" />
+        <Column title="Name" dataIndex="name" key="name" />
+        <Column title="Email" dataIndex="email" key="email" />
+        <Column title="Gender" dataIndex="gender" key="gender" />
+        <Column
+          title="Address"
+          dataIndex="address"
+          key="address"
+          render={(text) => <>{`${text.street}, ${text.city}`}</>}
+        />
+        <Column title="Phone" dataIndex="phone" key="phone" />
+        <Column
+          title="Action"
+          key="action"
+          render={(text: User, record: User) => (
+            <Space>
+              <Button danger onClick={() => handleDeleteData(record.id)}>
+                Delete
+              </Button>
+            </Space>
+          )}
+        />
+      </Table>
     </>
   );
 }
