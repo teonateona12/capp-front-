@@ -1,53 +1,41 @@
-import { useState, useEffect } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useEffect } from "react";
 import "./App.css";
-import axios from "axios";
+import { useDataStore } from "./store";
 
 function App() {
-  const [data, setData] = useState();
+  const { data, loadData, addData, updateData, deleteData } = useDataStore();
+
   useEffect(() => {
-    const getItemsList = async () => {
-      const res = await axios.get("http://localhost:3001/api/getdata");
-      setData(res.data);
-    };
-    getItemsList();
+    loadData();
   }, []);
-  const addItem = async (e: any) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/api/addata",
-        "data object"
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+  console.log(data);
+
+  const handleAddData = async () => {
+    const newData = {
+      id: 101,
+      name: "John Doe",
+      email: "johndoe@example.com",
+      gender: "male",
+      address: { street: "123 Main St", city: "Anytown" },
+      phone: "+1 (555) 555-5555",
+    };
+    await addData(newData);
   };
-  const handleUpdate = async () => {
-    try {
-      const response = await axios.put(
-        `http://localhost:3001/api/addata/${"id"}`,
-        {
-          updatedData: "updatedData",
-        }
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleUpdateData = async (id: number, data: any) => {
+    const updatedData = {
+      id: 1,
+      name: "Jane Doe",
+      email: "janedoe@example.com",
+      gender: "female",
+      address: { street: "456 Elm St", city: "Anytown" },
+      phone: "+1 (555) 555-5555",
+    };
+    await updateData(id, data);
   };
-  const handleDelete = async () => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:3001/api/addata/${"id"}`
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleDeleteData = async (id: number) => {
+    await deleteData(id);
   };
+
   return <></>;
 }
 
