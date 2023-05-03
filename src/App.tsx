@@ -25,6 +25,19 @@ function App() {
       console.log(error);
     }
   };
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:3001/api/addata/${"id"}`,
+        {
+          updatedData: "updatedData",
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return <></>;
 }
 
