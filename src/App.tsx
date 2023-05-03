@@ -1,6 +1,42 @@
 import { useEffect } from "react";
 import "./App.css";
 import { useDataStore } from "./store";
+import { Table, Select } from "antd";
+
+const columns = [
+  {
+    title: "ID",
+    dataIndex: "id",
+    key: "id",
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+  },
+  {
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
+  },
+  {
+    title: "Gender",
+    dataIndex: "gender",
+    key: "gender",
+  },
+  {
+    title: "Address",
+    dataIndex: "address",
+    key: "address",
+    render: (address: { street: string; city: string }) =>
+      `${address.street}, ${address.city}`,
+  },
+  {
+    title: "Phone",
+    dataIndex: "phone",
+    key: "phone",
+  },
+];
 
 function App() {
   const { data, loadData, addData, updateData, deleteData } = useDataStore();
@@ -36,7 +72,11 @@ function App() {
     await deleteData(id);
   };
 
-  return <></>;
+  return (
+    <>
+      <Table dataSource={data} columns={columns} />
+    </>
+  );
 }
 
 export default App;
