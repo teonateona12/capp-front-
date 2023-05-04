@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { useDataStore, User } from "./store";
-import { Table, Button, Space, Modal, Form, Input, Select } from "antd";
-const { Option } = Select;
+import { Table, Button, Space, Modal, Form, Input } from "antd";
+import { Pie } from "@ant-design/charts";
+import "antd/dist/antd.css";
+import { Select } from "antd";
+import Option from "antd/es/Select";
 const { Column } = Table;
 
 function App() {
@@ -72,10 +75,20 @@ function App() {
     await deleteData(id);
   };
 
+  const pagination = {
+    pageSize: 5,
+    total: data.length,
+    showSizeChanger: true,
+    pageSizeOptions: ["10", "20", "30"],
+    showTotal: (total: any, range: any) =>
+      `${range[0]}-${range[1]} of ${total} items`,
+  };
+
   return (
     <>
       <Button
         type="primary"
+        style={{ margin: "15px" }}
         onClick={() => {
           setFormData({
             name: "",
@@ -95,7 +108,8 @@ function App() {
       </Button>
       <Table
         dataSource={data}
-        rowKey="id"
+        pagination={pagination}
+        style={{ border: "1px solid #d9d9d9", borderRadius: "4px" }}
         onRow={(record) => ({ onDoubleClick: () => handleDoubleClick(record) })}
       >
         <Column title="Id" dataIndex="id" key="id" />
