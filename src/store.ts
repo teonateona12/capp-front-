@@ -35,6 +35,7 @@ export const useDataStore = create<DataStore>((set) => ({
     }
   },
   addData: async (user: User) => {
+    console.log("user");
     try {
       await axios.post("http://localhost:3001/api/addata", user);
       set((state) => ({ data: [...state.data, user] }));
@@ -44,16 +45,17 @@ export const useDataStore = create<DataStore>((set) => ({
   },
 
   updateData: async (id: number, user: User) => {
+    console.log(id, user);
     try {
       await axios.put(`http://localhost:3001/api/addata/${id}`, user);
       set((state) => ({
-        data: state.data.map((u) => (u.id === id ? user : u)),
+        data: state.data.map((u) => (u.id == id ? user : u)),
       }));
+      console.log("ariqa");
     } catch (error) {
       console.log(error);
     }
   },
-
   deleteData: async (id: number) => {
     try {
       await axios.delete(`http://localhost:3001/api/addata/${id}`);

@@ -8,6 +8,8 @@ const { Column } = Table;
 function App() {
   const { data, loadData, addData, updateData, deleteData } = useDataStore();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<any>(null);
   const [error, setError] = useState<string>("");
   const [formData, setFormData] = useState({
     name: "",
@@ -18,7 +20,13 @@ function App() {
       city: "",
     },
     phone: "",
+    id: 0,
   });
+  const handleUpdateData = async (id: number, newData: User) => {
+    await updateData(id, newData);
+    setModal(false);
+  };
+
   const handleAddData = async () => {
     const newData = {
       ...formData,
@@ -42,6 +50,7 @@ function App() {
           city: "",
         },
         phone: "",
+        id: 0,
       });
       setIsModalVisible(false);
       setError("");
@@ -49,43 +58,46 @@ function App() {
       setError("სავალდებულოა ყველა ველის შევსება");
     }
   };
+  const handleDoubleClick = (record: any) => {
+    setSelectedRow(record);
+    setFormData(record);
+    setModal(true);
+  };
 
   useEffect(() => {
     loadData();
   }, []);
 
-  // const handleAddData = async () => {
-  //   const newData = {
-  //     id: 101,
-  //     name: "John Doe",
-  //     email: "johndoe@example.com",
-  //     gender: "male",
-  //     address: { street: "123 Main St", city: "Anytown" },
-  //     phone: "+1 (555) 555-5555",
-  //   };
-  //   await addData(newData);
-  // };
-  const handleUpdateData = async (id: number, data: any) => {
-    const updatedData = {
-      id: 1,
-      name: "Jane Doe",
-      email: "janedoe@example.com",
-      gender: "female",
-      address: { street: "456 Elm St", city: "Anytown" },
-      phone: "+1 (555) 555-5555",
-    };
-    await updateData(id, data);
-  };
   const handleDeleteData = async (id: number) => {
     await deleteData(id);
   };
 
   return (
     <>
-      <Button type="primary" onClick={() => setIsModalVisible(true)}>
+      <Button
+        type="primary"
+        onClick={() => {
+          setFormData({
+            name: "",
+            email: "",
+            gender: "",
+            address: {
+              street: "",
+              city: "",
+            },
+            phone: "",
+            id: 0,
+          });
+          setIsModalVisible(true);
+        }}
+      >
         Add Data
       </Button>
-      <Table dataSource={data} rowKey="id">
+      <Table
+        dataSource={data}
+        rowKey="id"
+        onRow={(record) => ({ onDoubleClick: () => handleDoubleClick(record) })}
+      >
         <Column title="Id" dataIndex="id" key="id" />
         <Column title="Name" dataIndex="name" key="name" />
         <Column title="Email" dataIndex="email" key="email" />
@@ -109,6 +121,109 @@ function App() {
           )}
         />
       </Table>
+      <Modal
+        title="update Data"
+        open={modal}
+        onOk={
+          selectedRow
+            ? () => handleUpdateData(selectedRow.id, formData)
+            : undefined
+        }
+        onCancel={() => {
+          setSelectedRow(null);
+          setModal(false);
+        }}
+      >
+        <Form layout="vertical">
+          <Form.Item label="Name">
+            <Input
+              name="name"
+              value={formData.name}
+              required
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  name: e.target.value,
+                })
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Email">
+            <Input
+              name="email"
+              value={formData.email}
+              required
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  email: e.target.value,
+                })
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Gender">
+            <Select
+              value={formData.gender}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  gender: e,
+                })
+              }
+            >
+              <Option value="male">Male</Option>
+              <Option value="female">Female</Option>
+              <Option value="other">Other</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="Street">
+            <Input
+              name="street"
+              value={formData.address.street}
+              required
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  address: {
+                    ...formData.address,
+                    street: e.target.value,
+                  },
+                })
+              }
+            />
+          </Form.Item>
+          <Form.Item label="City">
+            <Input
+              name="city"
+              value={formData.address.city}
+              required
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  address: {
+                    ...formData.address,
+                    city: e.target.value,
+                  },
+                })
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Phone">
+            <Input
+              name="email"
+              value={formData.phone}
+              required
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  phone: e.target.value,
+                })
+              }
+            />
+          </Form.Item>
+          <p style={{ color: "red" }}>{error}</p>
+        </Form>
+      </Modal>
       <Modal
         title="Add Data"
         open={isModalVisible}
