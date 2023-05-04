@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDataStore, User } from ".././store";
-import { Table, Button, Space, Modal, Form, Input } from "antd";
+import { Table, Button, Space, Modal, Form, Input, Select } from "antd";
 import "antd/dist/antd.css";
-import { Select } from "antd";
 import Option from "antd/es/Select";
 import { Link } from "react-router-dom";
 const { Column } = Table;
@@ -127,7 +126,7 @@ const Home = () => {
         <Column
           title="Action"
           key="action"
-          render={(text: User, record: User) => (
+          render={(_: User, record: User) => (
             <Space>
               <Button danger onClick={() => handleDeleteData(record.id)}>
                 Delete
