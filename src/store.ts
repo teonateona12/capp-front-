@@ -28,16 +28,17 @@ export const useDataStore = create<DataStore>((set) => ({
 
   loadData: async () => {
     try {
-      const response = await axios.get("http://localhost:3001/api/getdata");
+      const response = await axios.get(
+        "https://capp-api.onrender.com/api/getdata"
+      );
       set({ data: response.data });
     } catch (error) {
       console.log(error);
     }
   },
   addData: async (user: User) => {
-    console.log("user");
     try {
-      await axios.post("http://localhost:3001/api/addata", user);
+      await axios.post("https://capp-api.onrender.com/api/addata", user);
       set((state) => ({ data: [...state.data, user] }));
     } catch (error) {
       console.log(error);
@@ -45,9 +46,8 @@ export const useDataStore = create<DataStore>((set) => ({
   },
 
   updateData: async (id: number, user: User) => {
-    console.log(id, user);
     try {
-      await axios.put(`http://localhost:3001/api/addata/${id}`, user);
+      await axios.put(`https://capp-api.onrender.com/api/addata/${id}`, user);
       set((state) => ({
         data: state.data.map((u) => (u.id == id ? user : u)),
       }));
@@ -58,7 +58,7 @@ export const useDataStore = create<DataStore>((set) => ({
   },
   deleteData: async (id: number) => {
     try {
-      await axios.delete(`http://localhost:3001/api/addata/${id}`);
+      await axios.delete(`https://capp-api.onrender.com/api/addata/${id}`);
       set((state) => ({
         data: state.data.filter((u) => u.id !== id),
       }));
