@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDataStore, User } from ".././store";
-import { Table, Button, Space, Modal, Form, Input } from "antd";
+import { Table, Button, Space, Modal, Form, Input, Select } from "antd";
 import "antd/dist/antd.css";
 import { Link } from "react-router-dom";
 const { Column } = Table;
-import Select from "antd/es/Select";
 
 const Home = () => {
   const { data, loadData, addData, updateData, deleteData } = useDataStore();
