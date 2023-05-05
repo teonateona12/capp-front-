@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDataStore, User } from ".././store";
-import { Table, Button, Space, Modal, Form, Input, Select } from "antd";
+import { Table, Button, Space, Modal, Form, Input } from "antd";
 import "antd/dist/antd.css";
-import Option from "antd/es/Select";
 import { Link } from "react-router-dom";
 const { Column } = Table;
+import Select from "antd/es/Select";
 
 const Home = () => {
   const { data, loadData, addData, updateData, deleteData } = useDataStore();
@@ -135,6 +135,7 @@ const Home = () => {
           )}
         />
       </Table>
+
       <Modal
         title="update Data"
         open={modal}
@@ -185,9 +186,9 @@ const Home = () => {
                 })
               }
             >
-              <Option value="male">Male</Option>
-              <Option value="female">Female</Option>
-              <Option value="other">Other</Option>
+              <Select.Option value="male">Male</Select.Option>
+              <Select.Option value="female">Female</Select.Option>
+              <Select.Option value="other">Other</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label="Street">
@@ -281,9 +282,9 @@ const Home = () => {
                 })
               }
             >
-              <Option value="male">Male</Option>
-              <Option value="female">Female</Option>
-              <Option value="other">Other</Option>
+              <Select.Option value="male">Male</Select.Option>
+              <Select.Option value="female">Female</Select.Option>
+              <Select.Option value="other">Other</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label="Street">
